@@ -1,5 +1,4 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
-const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const AddThread = require('../../../Domains/threads/entities/AddThread');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const pool = require('../../database/postgres/pool');
@@ -20,7 +19,7 @@ describe('ThreadRepositoryPostgres', () => {
       const addThread = new AddThread({
         title: 'Thread Title',
         body: 'This is Thread Body',
-        credentialId: 'user-123',
+        owner: 'user-123',
       });
       const fakeIdGenerator = () => '123'; // stub!
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(
@@ -36,12 +35,12 @@ describe('ThreadRepositoryPostgres', () => {
       expect(threads).toHaveLength(1);
     });
 
-    it('should return registered user correctly', async () => {
+    it('should return added thread correctly', async () => {
       // Arrange
       const addThread = new AddThread({
         title: 'Thread Title',
         body: 'This is Thread Body',
-        credentialId: 'user-123',
+        owner: 'user-123',
       });
       const fakeIdGenerator = () => '123'; // stub!
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(
