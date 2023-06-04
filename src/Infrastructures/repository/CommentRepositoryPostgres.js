@@ -14,10 +14,11 @@ class CommentRepositoryPostgres extends CommentRepository {
     const { threadId, content, owner } = addComment;
     const id = `comment-${this._idGenerator()}`;
     const createdAt = new Date().toISOString();
+    const isDeleted = false;
 
     const query = {
-      text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5) RETURNING id, content, owner',
-      values: [id, threadId, owner, content, createdAt],
+      text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6) RETURNING id, content, owner',
+      values: [id, threadId, owner, content, createdAt, isDeleted],
     };
 
     const result = await this._pool.query(query);
@@ -69,13 +70,38 @@ class CommentRepositoryPostgres extends CommentRepository {
     }
   }
 
-  async deleteComment(commentId) {
+  async getCommentsByThreadId(threadId) {
     const query = {
-      text: 'DELETE FROM comments WHERE id = $1',
-      values: [commentId],
+      text: `SELECT comments.id, users.username, date,
+            CASE
+              WHEN "isDeleted" THEN '**komentar telah dihapus**'
+              ELSE content
+            END AS content
+            FROM comments JOIN users ON users.id = comments.owner 
+            WHERE comments.thread_id = $1`,
+      values: [threadId],
     };
 
-    await this._pool.query(query);
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('comment tidak ditemukan');
+    }
+
+    return result.rows;
+  }
+
+  async deleteComment(commentId) {
+    try {
+      const isDeleted = true;
+      const query = {
+        text: 'UPDATE comments SET "isDeleted" = $1 WHERE id = $2',
+        values: [isDeleted, commentId],
+      };
+      await this._pool.query(query);
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 }
 

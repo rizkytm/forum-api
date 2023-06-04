@@ -159,7 +159,7 @@ describe('CommentRepositoryPostgres', () => {
       // Assert
       await commentRepositoryPostgres.deleteComment('comment-213', 'user-213');
       const comments = await CommentsTableTestHelper.findCommentById('comment-213');
-      expect(comments).toHaveLength(0);
+      expect(comments).toHaveLength(1);
     });
   });
 });
