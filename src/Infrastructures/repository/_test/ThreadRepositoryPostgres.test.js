@@ -66,40 +66,6 @@ describe('ThreadRepositoryPostgres', () => {
     });
   });
 
-  // describe('getThreadById function', () => {
-  //   it('should return detail thread correctly', async () => {
-  //     // Arrange
-  //     const fakeIdGenerator = () => '123'; // stub!
-  //     const detailThread = {
-  //       id: 'thread-123',
-  //       title: 'Thread Title',
-  //       body: 'This is Thread Body',
-  //       date: '2023-06-04T05:19:40.105Z',
-  //       username: 'user-123',
-  //     };
-  //     const addThread = new AddThread({
-  //       title: detailThread.title,
-  //       body: detailThread.body,
-  //       owner: detailThread.username,
-  //     });
-
-  //     const threadRepositoryPostgres = new ThreadRepositoryPostgres(
-  //       pool,
-  //       fakeIdGenerator,
-  //     );
-
-  //     // Action
-  //     console.log(addThread);
-  //     await threadRepositoryPostgres.postThread(addThread);
-  //     const thread = await threadRepositoryPostgres.getThreadById(
-  //       detailThread.id,
-  //     );
-
-  //     // Assert
-  //     expect(thread).toStrictEqual(new DetailThread(detailThread));
-  //   });
-  // });
-
   describe('getThreadById', () => {
     it('should throw InvariantError when thread not found', async () => {
       // Arrange

@@ -10,7 +10,7 @@ class CommentsHandler {
   }
 
   async postCommentHandler(request, h) {
-    const cddCommentUseCase = this._container.getInstance(
+    const addCommentUseCase = this._container.getInstance(
       AddCommentUseCase.name,
     );
     const { content } = request.payload;
@@ -21,7 +21,7 @@ class CommentsHandler {
       content,
       owner,
     };
-    const addedComment = await cddCommentUseCase.execute(postCommentPayload);
+    const addedComment = await addCommentUseCase.execute(postCommentPayload);
 
     const response = h.response({
       status: 'success',

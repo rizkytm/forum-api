@@ -7,6 +7,7 @@ const AddComment = require('../../../Domains/comments/entities/AddComment');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const pool = require('../../database/postgres/pool');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
+const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
 describe('CommentRepositoryPostgres', () => {
   afterEach(async () => {
@@ -23,18 +24,18 @@ describe('CommentRepositoryPostgres', () => {
     it('should not throw NotFoundError when thread is available', async () => {
       // Arrange
       await ThreadsTableTestHelper.postThread({ id: 'thread-234' });
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & Assert
-      await expect(commentRepositoryPostgres.verifyThreadExists('thread-234')).resolves.not.toThrowError(NotFoundError);
+      await expect(threadRepositoryPostgres.verifyThreadExists('thread-234')).resolves.not.toThrowError(NotFoundError);
     });
 
     it('should throw NotFoundError when thread is not available', async () => {
       // Arrange
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & Assert
-      await expect(commentRepositoryPostgres.verifyThreadExists('thread-234')).rejects.toThrowError(NotFoundError);
+      await expect(threadRepositoryPostgres.verifyThreadExists('thread-234')).rejects.toThrowError(NotFoundError);
     });
   });
 
@@ -160,6 +161,7 @@ describe('CommentRepositoryPostgres', () => {
       await commentRepositoryPostgres.deleteComment('comment-213', 'user-213');
       const comments = await CommentsTableTestHelper.findCommentById('comment-213');
       expect(comments).toHaveLength(1);
+      expect(comments[0].isDeleted).toEqual(true);
     });
   });
 });
