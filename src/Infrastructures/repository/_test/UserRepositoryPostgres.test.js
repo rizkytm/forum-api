@@ -119,7 +119,7 @@ describe('UserRepositoryPostgres', () => {
       const userId = await userRepositoryPostgres.getIdByUsername('dicoding');
 
       // Assert
-      expect(userId).toEqual('user-321');
+      expect(userId).toStrictEqual('user-321');
     });
   });
 });

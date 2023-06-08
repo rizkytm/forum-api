@@ -21,6 +21,7 @@ describe('DetailCommentUseCase', () => {
       content: 'This is Comment',
       date: '2023-06-04T05:19:40.105Z',
       username: 'user-123',
+      isDeleted: false,
     });
     mockDetailCommentArray.push(mockDetailComment);
     mockDetailCommentArray.push(mockDetailComment);
@@ -44,7 +45,7 @@ describe('DetailCommentUseCase', () => {
     const detailComment = await getCommentUseCase.execute(useCasePayload);
 
     // Assert
-    expect(detailComment).toEqual(
+    expect(detailComment).toStrictEqual(
       expect.arrayContaining([
         expect.objectContaining(
           new DetailComment({
@@ -52,6 +53,7 @@ describe('DetailCommentUseCase', () => {
             username: mockDetailComment.username,
             date: mockDetailComment.date,
             content: mockDetailComment.content,
+            isDeleted: mockDetailComment.isDeleted,
           }),
         ),
       ]),

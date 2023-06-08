@@ -2,6 +2,7 @@ const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
+const DetailComment = require('../../Domains/comments/entities/DetailComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -59,11 +60,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async getCommentsByThreadId(threadId) {
     const query = {
-      text: `SELECT comments.id, users.username, date,
-            CASE
-              WHEN "isDeleted" THEN '**komentar telah dihapus**'
-              ELSE content
-            END AS content
+      text: `SELECT comments.id, users.username, date, content, comments."isDeleted"
             FROM comments JOIN users ON users.id = comments.owner 
             WHERE comments.thread_id = $1`,
       values: [threadId],
@@ -75,20 +72,17 @@ class CommentRepositoryPostgres extends CommentRepository {
       throw new NotFoundError('comment tidak ditemukan');
     }
 
-    return result.rows;
+    // return result.rows;
+    return result.rows.map((item) => new DetailComment(item));
   }
 
   async deleteComment(commentId) {
-    try {
-      const isDeleted = true;
-      const query = {
-        text: 'UPDATE comments SET "isDeleted" = $1 WHERE id = $2',
-        values: [isDeleted, commentId],
-      };
-      await this._pool.query(query);
-    } catch (error) {
-      console.log(error.message);
-    }
+    const isDeleted = true;
+    const query = {
+      text: 'UPDATE comments SET "isDeleted" = $1 WHERE id = $2',
+      values: [isDeleted, commentId],
+    };
+    await this._pool.query(query);
   }
 }
 

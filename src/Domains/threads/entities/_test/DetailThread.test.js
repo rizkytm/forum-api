@@ -46,10 +46,10 @@ describe('a DetailThread entities', () => {
     const detailThread = new DetailThread(payload);
 
     // Assert
-    expect(detailThread.id).toEqual(payload.id);
-    expect(detailThread.title).toEqual(payload.title);
-    expect(detailThread.body).toEqual(payload.body);
-    expect(detailThread.date).toEqual(payload.date);
-    expect(detailThread.username).toEqual(payload.username);
+    expect(detailThread.id).toStrictEqual(payload.id);
+    expect(detailThread.title).toStrictEqual(payload.title);
+    expect(detailThread.body).toStrictEqual(payload.body);
+    expect(detailThread.date).toStrictEqual(payload.date);
+    expect(detailThread.username).toStrictEqual(payload.username);
   });
 });

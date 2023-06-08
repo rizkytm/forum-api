@@ -38,7 +38,7 @@ describe('a AddThread entities', () => {
 
     // Assert
     expect(addThread).toBeInstanceOf(AddThread);
-    expect(addThread.title).toEqual(payload.title);
-    expect(addThread.body).toEqual(payload.body);
+    expect(addThread.title).toStrictEqual(payload.title);
+    expect(addThread.body).toStrictEqual(payload.body);
   });
 });

@@ -38,8 +38,8 @@ describe('a AddComment entities', () => {
 
     // Assert
     expect(addComment).toBeInstanceOf(AddComment);
-    expect(addComment.threadId).toEqual(payload.threadId);
-    expect(addComment.content).toEqual(payload.content);
-    expect(addComment.owner).toEqual(payload.owner);
+    expect(addComment.threadId).toStrictEqual(payload.threadId);
+    expect(addComment.content).toStrictEqual(payload.content);
+    expect(addComment.owner).toStrictEqual(payload.owner);
   });
 });

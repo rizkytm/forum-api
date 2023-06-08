@@ -44,15 +44,16 @@ describe('DetailThreadUseCase', () => {
     const detailThread = await getThreadUseCase.execute(useCasePayload);
 
     // Assert
-    // expect(detailThread).toEqual(
-    //   new DetailThread({
-    //     id: 'thread-123',
-    //     title: mockDetailThread.title,
-    //     body: mockDetailThread.body,
-    //     date: mockDetailThread.date,
-    //     username: mockDetailThread.username,
-    //   }),
-    // );
+    expect(detailThread).toStrictEqual(
+      {
+        id: 'thread-123',
+        title: mockDetailThread.title,
+        body: mockDetailThread.body,
+        date: mockDetailThread.date,
+        username: mockDetailThread.username,
+        comments: [],
+      },
+    );
 
     expect(mockThreadRepository.getThreadById).toBeCalledWith(useCasePayload.threadId);
   });

@@ -19,7 +19,7 @@ describe('JwtTokenManager', () => {
 
       // Assert
       expect(mockJwtToken.generate).toBeCalledWith(payload, process.env.ACCESS_TOKEN_KEY);
-      expect(accessToken).toEqual('mock_token');
+      expect(accessToken).toStrictEqual('mock_token');
     });
   });
 
@@ -39,7 +39,7 @@ describe('JwtTokenManager', () => {
 
       // Assert
       expect(mockJwtToken.generate).toBeCalledWith(payload, process.env.REFRESH_TOKEN_KEY);
-      expect(refreshToken).toEqual('mock_token');
+      expect(refreshToken).toStrictEqual('mock_token');
     });
   });
 
@@ -77,7 +77,7 @@ describe('JwtTokenManager', () => {
       const { username: expectedUsername } = await jwtTokenManager.decodePayload(accessToken);
 
       // Action & Assert
-      expect(expectedUsername).toEqual('dicoding');
+      expect(expectedUsername).toStrictEqual('dicoding');
     });
   });
 });

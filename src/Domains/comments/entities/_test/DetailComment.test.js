@@ -22,6 +22,7 @@ describe('a DetailComment entities', () => {
       username: 'user-123',
       date: '2023-06-04T05:19:40.105Z',
       content: {},
+      isDeleted: false,
     };
 
     // Action and Assert
@@ -37,15 +38,38 @@ describe('a DetailComment entities', () => {
       username: 'user-123',
       date: '2023-06-04T05:19:40.105Z',
       content: 'This is Comment',
+      isDeleted: false,
     };
 
     // Action
     const detailComment = new DetailComment(payload);
 
     // Assert
-    expect(detailComment.id).toEqual(payload.id);
-    expect(detailComment.username).toEqual(payload.username);
-    expect(detailComment.date).toEqual(payload.date);
-    expect(detailComment.content).toEqual(payload.content);
+    expect(detailComment.id).toStrictEqual(payload.id);
+    expect(detailComment.username).toStrictEqual(payload.username);
+    expect(detailComment.date).toStrictEqual(payload.date);
+    expect(detailComment.content).toStrictEqual(payload.content);
+    expect(detailComment.isDeleted).toStrictEqual(payload.isDeleted);
+  });
+
+  it('should create deleted detailComment object correctly', () => {
+    // Arrange
+    const payload = {
+      id: 'comment-123',
+      username: 'user-123',
+      date: '2023-06-04T05:19:40.105Z',
+      content: 'This is Comment',
+      isDeleted: true,
+    };
+
+    // Action
+    const detailComment = new DetailComment(payload);
+
+    // Assert
+    expect(detailComment.id).toStrictEqual(payload.id);
+    expect(detailComment.username).toStrictEqual(payload.username);
+    expect(detailComment.date).toStrictEqual(payload.date);
+    expect(detailComment.content).toStrictEqual('**komentar telah dihapus**');
+    expect(detailComment.isDeleted).toStrictEqual(payload.isDeleted);
   });
 });

@@ -60,6 +60,30 @@ describe('CommentRepositoryPostgres', () => {
     });
   });
 
+  describe('getCommentsByThreadId function', () => {
+    it('should throw NotFoundError when comments not found', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-2341', username: 'user2341' });
+      await ThreadsTableTestHelper.postThread({ id: 'thread-2341', owner: 'user-2341' });
+      await CommentsTableTestHelper.postComment({ id: 'comment-2341', threadId: 'thread-2341', owner: 'user-2341' });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.getCommentsByThreadId('thread-333')).rejects.toThrowError(NotFoundError);
+    });
+
+    it('should not throw NotFoundError when comments found', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-2341', username: 'user2341' });
+      await ThreadsTableTestHelper.postThread({ id: 'thread-2341', owner: 'user-2341' });
+      await CommentsTableTestHelper.postComment({ id: 'comment-2341', threadId: 'thread-2341', owner: 'user-2341' });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.getCommentsByThreadId('thread-2341')).resolves.not.toThrowError(NotFoundError);
+    });
+  });
+
   describe('verifyCommentOwner function', () => {
     it('should not throw AuthorizationError when owner is valid', async () => {
       // Arrange
@@ -70,6 +94,17 @@ describe('CommentRepositoryPostgres', () => {
 
       // Action & Assert
       await expect(commentRepositoryPostgres.verifyCommentOwner('comment-2341', 'user-2341')).resolves.not.toThrowError(AuthorizationError);
+    });
+
+    it('should throw NotFoundError when comment not found', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-2341', username: 'user2341' });
+      await ThreadsTableTestHelper.postThread({ id: 'thread-2341', owner: 'user-2341' });
+      await CommentsTableTestHelper.postComment({ id: 'comment-2341', threadId: 'thread-2341', owner: 'user-2341' });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentOwner('comment-2222', 'user-1111')).rejects.toThrowError(NotFoundError);
     });
 
     it('should throw AuthorizationError when owner is invalid', async () => {
@@ -161,7 +196,7 @@ describe('CommentRepositoryPostgres', () => {
       await commentRepositoryPostgres.deleteComment('comment-213', 'user-213');
       const comments = await CommentsTableTestHelper.findCommentById('comment-213');
       expect(comments).toHaveLength(1);
-      expect(comments[0].isDeleted).toEqual(true);
+      expect(comments[0].isDeleted).toStrictEqual(true);
     });
   });
 });
