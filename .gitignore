@@ -2,6 +2,8 @@ node_modules
 package-lock.json
 .idea
 config/database/test.json
+config/database/test.prod.json
 coverage
 .env
+.env.prod
 forum-api-app-server.pem
