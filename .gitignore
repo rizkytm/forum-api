@@ -3,6 +3,7 @@ package-lock.json
 .idea
 config/database/test.json
 config/database/test.prod.json
+config/database/domain.json
 coverage
 .env
 .env.prod
